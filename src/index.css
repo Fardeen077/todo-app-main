@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+:root {
+    /* App.css or your global CSS */
+body {
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+}
