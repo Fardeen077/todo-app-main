@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, nanoid } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { nanoid } from "nanoid";
 
 const TodosContext = createContext();
 
@@ -6,16 +7,25 @@ export const useTodos = () => useContext(TodosContext);
 
 export const TodosProvider = ({ children }) => {
 
-    // TODOS ARRAY 
-    const [todos, setTodos] = useState([
+    // Default todos showing 
+    const defaultTodos = [
         { id: 1, completed: true, text: "Complete online Javascript course" },
         { id: 2, completed: true, text: "Jog around the park 3x" },
         { id: 3, completed: true, text: "10 minutes meditation" },
         { id: 4, completed: true, text: "Read for 1 hour" },
         { id: 5, completed: true, text: "Pick up groceries" },
         { id: 6, completed: true, text: "Completed Todo App on Frontend Mentor" }
-    ]);
+    ]
 
+    // TODOS ARRAY 
+    const [todos, setTodos] = useState(() => {
+        const localData = JSON.parse(localStorage.getItem("todos"));
+        return localData === null ? defaultTodos : localData;
+    });
+
+    useEffect(() => {
+        localStorage.setItem("todos", JSON.stringify(todos));
+    }, [todos]);
     // THIS FUNCTION IS CREATE NEW TODO IN TODOS ARRAY 
     const addTodos = (text) => {
         const newTodo = {
@@ -23,7 +33,7 @@ export const TodosProvider = ({ children }) => {
             completed: false,
             text,
         };
-        setTodos((prev) => [...prev, newTodo]);
+        setTodos((prev) => [newTodo, ...prev]);
     };
     // THIS REMOVE FUNCTION ARE RETURN NEW TODOS ARRAY
     const removeTodos = (id) => setTodos((prev) => prev.filter((todo) => todo.id !== id));
@@ -46,7 +56,7 @@ export const TodosProvider = ({ children }) => {
 
 
     return (
-        <TodosContext.Provider value={{ addTodos, removeTodos, updateTodos, getAllTodos, getActiveTodos, getCompletedTodos, clearTodos }}>
+        <TodosContext.Provider value={{ addTodos, removeTodos, updateTodos, getAllTodos, getActiveTodos, getCompletedTodos, clearTodos, todos }}>
             {children}
         </TodosContext.Provider>
     )
