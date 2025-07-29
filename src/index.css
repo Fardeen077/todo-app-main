@@ -2,6 +2,7 @@
 
 :root {
     /* App.css or your global CSS */
+    width: 100%;
 body {
   font-family: 'Josefin Sans', sans-serif;
 }
