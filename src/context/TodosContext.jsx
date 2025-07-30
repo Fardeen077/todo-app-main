@@ -35,6 +35,9 @@ export const TodosProvider = ({ children }) => {
         };
         setTodos((prev) => [newTodo, ...prev]);
     };
+    // ALL TODOS FILTER FUN
+    const [filter, setFilter] = useState("all");
+
     // THIS REMOVE FUNCTION ARE RETURN NEW TODOS ARRAY
     const removeTodos = (id) => setTodos((prev) => prev.filter((todo) => todo.id !== id));
 
@@ -42,11 +45,17 @@ export const TodosProvider = ({ children }) => {
     const updateTodos = (id, text) => setTodos((prev) => prev.map((todo) => todo.id === id ? { ...todo, text } : todo));
 
 
-    // THIS FUNCTION IS USE FOR CHACK ALL TODOS STATUS
-    const getAllTodos = () => todos;
-
-    // FUNCTION FOR CHECK ACTIVE TODOS IN TODOLIST
-    const getActiveTodos = () => todos.filter(todo => !todo.completed);
+    // ADD FILTER TODOS 
+    const getFilteredTodos = () => {
+    switch (filter) {
+        case "active":
+            return todos.filter(todo => !todo.completed); // ✅ active = not completed
+        case "completed":
+            return todos.filter(todo => todo.completed);
+        default:
+            return todos;
+    }
+};
 
     // FUNCTION FOR GET ALL COMPLETED TODOS IN TODOLISTS
     const getCompletedTodos = () => todos.filter(todo => todo.completed);
@@ -54,9 +63,13 @@ export const TodosProvider = ({ children }) => {
     // CLEAR ALL TODO
     const clearTodos = () => setTodos([]);
 
+    const toggleTodos = (id) => {
+        setTodos((prevTodo) => prevTodo.map((todo) => todo.id === id ? { ...todo, completed: !todo.completed } : todo))
+    }
+
 
     return (
-        <TodosContext.Provider value={{ addTodos, removeTodos, updateTodos, getAllTodos, getActiveTodos, getCompletedTodos, clearTodos, todos }}>
+        <TodosContext.Provider value={{ addTodos, removeTodos, updateTodos,  getCompletedTodos, clearTodos, todos, filter, setFilter, getFilteredTodos, toggleTodos }}>
             {children}
         </TodosContext.Provider>
     )
