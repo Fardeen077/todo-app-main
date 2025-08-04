@@ -1,14 +1,13 @@
 import { useTodos } from "../context/TodosContext";
 
-
 function FilterBar() {
-    const { filter, setFilter } = useTodos();
+    const { filter, setFilter, clearCompleted, getPendingCount} = useTodos();
 
     return (
         <div className="flex justify-center bg-gray-800 cursor-pointer">
             <div className='gap-x-6 flex mt-4 font-bold text-white text-sx'>
                 <span className="mr-20">
-                    1 item Left
+                    {getPendingCount()} item Left
                 </span>
                 <button
                     onClick={() => setFilter("all")}
@@ -23,13 +22,14 @@ function FilterBar() {
                     Active
                 </button>
                 <button
-                    onClick={() => setFilter("completed")}
+                    onClick={()=> setFilter("completed")}
                     className={filter === "completed" ? "text-blue-500 font-bold" : ""}
                 >
                     Completed
                 </button>
-              <button>
-                 Claer Completed
+              <button 
+              onClick={clearCompleted}>
+                 Clear Completed
               </button>
             </div>
         </div>

@@ -47,29 +47,33 @@ export const TodosProvider = ({ children }) => {
 
     // ADD FILTER TODOS 
     const getFilteredTodos = () => {
-    switch (filter) {
-        case "active":
-            return todos.filter(todo => !todo.completed); // ✅ active = not completed
-        case "completed":
-            return todos.filter(todo => todo.completed);
-        default:
-            return todos;
-    }
-};
+        switch (filter) {
+            case "active":
+                return todos.filter(todo => !todo.completed); // ✅ active = not completed
+            case "completed":
+                return todos.filter(todo => todo.completed);
+            default:
+                return todos;
+        }
+    };
 
     // FUNCTION FOR GET ALL COMPLETED TODOS IN TODOLISTS
     const getCompletedTodos = () => todos.filter(todo => todo.completed);
 
-    // CLEAR ALL TODO
-    const clearTodos = () => setTodos([]);
+    // REMOVE DONE ALL TODOS
+    const clearCompleted = () => setTodos(prevTodo => prevTodo.filter(todo => !todo.completed));
 
     const toggleTodos = (id) => {
         setTodos((prevTodo) => prevTodo.map((todo) => todo.id === id ? { ...todo, completed: !todo.completed } : todo))
     }
 
+    // THIS FUNCTION IS WORK FOR SHOW PENDING TODOS IN FILTERBAR 
+    const getPendingCount = () => {
+        return todos.filter(todo => !todo.completed).length;
+    };
 
     return (
-        <TodosContext.Provider value={{ addTodos, removeTodos, updateTodos,  getCompletedTodos, clearTodos, todos, filter, setFilter, getFilteredTodos, toggleTodos }}>
+        <TodosContext.Provider value={{ addTodos, removeTodos, updateTodos, clearCompleted, getCompletedTodos, todos, filter, setFilter, getFilteredTodos, toggleTodos,getPendingCount }}>
             {children}
         </TodosContext.Provider>
     )

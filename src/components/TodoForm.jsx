@@ -17,7 +17,7 @@ function TodoForm() {
     <div className="flex justify-center bg-gray-800 py-4">
       <form onSubmit={handleSubmit}>
         <input type="text"
-          className="w-xl h-10 text-white hover:outline-none "
+          className="w-xl h-10 text-white hover:outline-none p-2"
           placeholder='Enter your todos'
           value={text}
           onChange={(e) => setText(e.target.value)} />
